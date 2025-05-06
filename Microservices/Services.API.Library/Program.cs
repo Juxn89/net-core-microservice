@@ -1,5 +1,6 @@
 using Services.API.Library.Core;
 using Services.API.Library.Core.ContextMongoDB;
+using Services.API.Library.Core.Entities;
 using Services.API.Library.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ builder.Services.AddSingleton<MongoSettings>();
 builder.Services.AddTransient<IAuthorContext,AuthorContext>();
 
 builder.Services.AddTransient<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
 
 var app = builder.Build();
 
