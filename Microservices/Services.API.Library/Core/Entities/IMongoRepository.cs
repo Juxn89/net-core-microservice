@@ -1,4 +1,6 @@
-﻿namespace Services.API.Library.Core.Entities
+﻿using System.Linq.Expressions;
+
+namespace Services.API.Library.Core.Entities
 {
   public interface IMongoRepository<TDocumento> where TDocumento : IDocument
   {
@@ -11,5 +13,10 @@
     Task Update(string id, TDocumento documento);
 
     Task Delete(string id);
+
+    Task<PaginationEntity<TDocumento>> PaginationBy(
+      Expression<Func<TDocumento, bool>> filterExpression,
+      PaginationEntity<TDocumento> paginationEntity
+    );
   }
 }

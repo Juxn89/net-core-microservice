@@ -62,5 +62,22 @@ namespace Services.API.Library.Controllers
       await _authorGenericRepository.Delete(id);
       return NoContent();
     }
+
+    [HttpPost("pagination")]
+    public async Task<IActionResult> Pagination([FromBody] PaginationEntity<AuthorEntity> paginationEntity)
+    {
+      if (paginationEntity == null)
+        return BadRequest();
+
+      var authors = await _authorGenericRepository.PaginationBy(
+        x => x.Name.Contains(paginationEntity.Filter),
+        paginationEntity
+      );
+
+      if (authors == null || !authors.Data.Any())
+        return NotFound();
+
+      return Ok(authors);
+    }
   }
 }

@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Services.API.Library.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,13 @@ builder.Services.AddControllers(options => {
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => {
+  options.SwaggerDoc("v1", new OpenApiInfo{ 
+    Title = "Library API",
+    Version = "v1",
+    Description = "Library API's documentation"
+  });
+});
 
 builder.Services.AddServices(builder);
 
