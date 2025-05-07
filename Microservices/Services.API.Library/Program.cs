@@ -1,27 +1,17 @@
-using Services.API.Library.Core;
-using Services.API.Library.Core.ContextMongoDB;
-using Services.API.Library.Core.Entities;
-using Services.API.Library.Repository;
+using Services.API.Library.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers(options => { 
+  options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+});
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<MongoSettings>(options => { 
-  options.ConnectionString = builder.Configuration.GetSection("MongoDB:ConnectionString").Value;
-  options.Database = builder.Configuration.GetSection("MongoDB:Database").Value;
-});
-
-builder.Services.AddSingleton<MongoSettings>();
-builder.Services.AddTransient<IAuthorContext,AuthorContext>();
-
-builder.Services.AddTransient<IAuthorRepository, AuthorRepository>();
-builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+builder.Services.AddServices(builder);
 
 var app = builder.Build();
 

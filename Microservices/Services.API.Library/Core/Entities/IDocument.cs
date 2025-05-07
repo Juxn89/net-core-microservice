@@ -7,7 +7,7 @@ namespace Services.API.Library.Core.Entities
   {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    ObjectId Id { get; set; }
+    string Id { get; set; }
 
     DateTime CreatedDate { get; }
   }

@@ -7,8 +7,8 @@ namespace Services.API.Library.Core.Entities
   {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public ObjectId Id { get; set; }
+    public string Id { get; set; }
 
-    public DateTime CreatedDate => Id.CreationTime;
+    public DateTime CreatedDate => DateTime.Now;
   }
 }
