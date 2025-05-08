@@ -18,5 +18,9 @@ namespace Services.API.Library.Core.Entities
       Expression<Func<TDocumento, bool>> filterExpression,
       PaginationEntity<TDocumento> paginationEntity
     );
+
+    Task<PaginationEntity<TDocumento>> PaginationBy(
+      PaginationEntity<TDocumento> paginationEntity
+    );
   }
 }

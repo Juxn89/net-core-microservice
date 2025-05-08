@@ -79,5 +79,21 @@ namespace Services.API.Library.Controllers
 
       return Ok(authors);
     }
+
+    [HttpPost("pagination-filter")]
+    public async Task<IActionResult> PaginationByFilter([FromBody] PaginationEntity<AuthorEntity> paginationEntity)
+    {
+      if (paginationEntity == null)
+        return BadRequest();
+
+      var authors = await _authorGenericRepository.PaginationBy(
+        paginationEntity
+      );
+
+      if (authors == null || !authors.Data.Any())
+        return NotFound();
+
+      return Ok(authors);
+    }
   }
 }

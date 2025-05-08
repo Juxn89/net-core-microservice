@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
@@ -72,6 +73,44 @@ public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDoc
     await _collection.FindOneAndReplaceAsync(filter, documento);
   }
 
+  public async Task<PaginationEntity<TDocument>> PaginationBy(PaginationEntity<TDocument> paginationEntity)
+  {
+    int totalRecords = 0;
+    var sort = Builders<TDocument>.Sort.Ascending(paginationEntity.Sort.ToString());
+
+    if (paginationEntity.SortDirection == SortDirection.Descending)
+      sort = Builders<TDocument>.Sort.Descending(paginationEntity.Sort.ToString());
+
+    if (paginationEntity.FilterValue == null) {
+      paginationEntity.Data = await _collection
+        .Find(x => true)
+        .Sort(sort)
+        .Skip(this.GetSkipCount(paginationEntity))
+        .Limit(paginationEntity.PageSize)
+        .ToListAsync();
+
+      totalRecords = (int)await GetTotalRecords();
+    }
+    else {
+      var filterExpression = $".*{ paginationEntity.FilterValue.Value }.";
+      var filter = Builders<TDocument>.Filter.Regex(paginationEntity.FilterValue.Key, new BsonRegularExpression(filterExpression, "i")); // i: non-case sensitive
+
+      paginationEntity.Data = await _collection
+        .Find(filter)
+        .Sort(sort)
+        .Skip(this.GetSkipCount(paginationEntity))
+        .Limit(paginationEntity.PageSize)
+        .ToListAsync();
+
+      totalRecords = (int)await GetTotalRecords(filter);
+    }
+
+    paginationEntity.PageQuantity = await this.GetPageQuantity(paginationEntity);
+    paginationEntity.TotalRecords = totalRecords;
+
+    return paginationEntity;
+  }
+
   private protected string GetCollectionName(Type documentType)
   {
     return ((BsonCollectionAttributte)documentType.GetCustomAttributes(typeof(BsonCollectionAttributte), true).FirstOrDefault()).CollectionName;
@@ -79,10 +118,18 @@ public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDoc
 
   private protected int GetSkipCount(PaginationEntity<TDocument> paginationEntity) => paginationEntity.PageSize * (paginationEntity.Page - 1);
 
+  private protected async Task<long> GetTotalRecords(FilterDefinition<TDocument>? filter = null)
+  {
+    if(filter != null)
+      return   (await _collection.Find(filter).ToListAsync()).Count;
+
+    return (await _collection.Find(FilterDefinition<TDocument>.Empty).ToListAsync()).Count;
+  }
+
   private protected async Task<int> GetPageQuantity(PaginationEntity<TDocument> paginationEntity)
   {
-    long totalDocuments = await _collection.CountDocumentsAsync( FilterDefinition<TDocument>.Empty );
+    long totalDocuments = await GetTotalRecords();
     var totalPages = Convert.ToInt32(Math.Ceiling((double)totalDocuments / paginationEntity.PageSize));
     return totalPages;
-  } 
+  }
 }

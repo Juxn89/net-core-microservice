@@ -14,7 +14,9 @@
     public string Sort { get; set; }
     public SortDirection SortDirection { get; set; }
     public string Filter { get; set; }
+    public FilterValue FilterValue { get; set; }
     public int PageQuantity { get; set; }
     public IEnumerable<TDocument> Data { get; set; }
+    public int TotalRecords { get; set; }
   }
 }
