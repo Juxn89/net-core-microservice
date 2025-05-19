@@ -9,6 +9,18 @@ namespace Services.API.Library.Extensions
   {
     public static IServiceCollection AddServices(this IServiceCollection services, WebApplicationBuilder builder)
     {
+
+      services.AddCors(options =>
+      {
+        options.AddPolicy("CorsPolicy",
+          builder =>
+          {
+            builder.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+          });
+      });
+
       services.Configure<MongoSettings>(options => {
         options.ConnectionString = builder.Configuration.GetSection("MongoDB:ConnectionString").Value;
         options.Database = builder.Configuration.GetSection("MongoDB:Database").Value;
