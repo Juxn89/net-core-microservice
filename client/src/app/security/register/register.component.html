@@ -1,17 +1,91 @@
 <section>
-  <form fxLayout="column" fxLayoutAlign="center center" #f="ngForm" (ngSubmit)="registerUser(f)">
+  <form
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    #f="ngForm"
+    (ngSubmit)="registerUser(f)"
+    fxlLayoutGap="20px"
+  >
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input
+        type="text"
+        ngModel name="name"
+        required
+        placeholder="Name"
+        matInput
+        #name="ngModel"
+      />
+      <mat-error *ngIf="name?.hasError('required') && name?.touched"
+        >Name field is mandatory</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Lastname</mat-label>
+      <input
+        type="text"
+        ngModel name="lastName"
+        required
+        placeholder="Lastname"
+        matInput
+        #lastName="ngModel"
+      />
+      <mat-error *ngIf="lastName?.hasError('required') && lastName?.touched"
+        >Name field is mandatory</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input
+        type="text"
+        ngModel name="userName"
+        required
+        placeholder="Username"
+        matInput
+        name="userName"
+        #userName="ngModel"
+      />
+      <mat-error *ngIf="userName?.hasError('required') && userName?.touched"
+        >Name field is
+      </mat-error>
+    </mat-form-field>
+
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input matInput type="text" type="email" placeholder="Email" ngModel name="email">
+      <input
+        matInput
+        type="email"
+        placeholder="Email"
+        ngModel
+        name="email"
+        required
+        email
+        #email="ngModel"
+      />
+      <mat-error *ngIf="email.hasError('required') && email.touched"
+        >Email field is mandatory</mat-error
+      >
+      <mat-error *ngIf="email.hasError('email') && email.touched"
+        >it must be a valid email</mat-error
+      >
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Password</mat-label>
-      <input matInput type="text" type="password" placeholder="Password" ngModel name="password">
+      <input
+        matInput
+        type="text"
+        type="password"
+        placeholder="Password"
+        ngModel
+        name="password"
+        required
+        minlength="7"
+      />
+      <mat-label>Password must have at least 7 characters</mat-label>
+      <mat-error>Password must have at least 7 characters </mat-error>
     </mat-form-field>
 
-    <button type="submit" mat-raised-button color="primary">
-      Save
-    </button>
+    <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Save</button>
   </form>
 </section>

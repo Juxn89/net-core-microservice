@@ -1,15 +1,24 @@
 import { Component } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout'
+import { FlexLayoutModule } from '@angular/flex-layout';
 
-import {FormsModule, NgForm} from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { CommonModule } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-register',
-  imports: [ MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatIconModule, FlexLayoutModule ],
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    FlexLayoutModule,
+    CommonModule,
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -17,6 +26,6 @@ export class RegisterComponent {
   value = 'Clear me';
 
   registerUser(form: NgForm) {
-    console.log(form)
+    console.log(form);
   }
 }
