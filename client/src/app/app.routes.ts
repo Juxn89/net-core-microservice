@@ -3,8 +3,10 @@ import { BookComponent } from './book/book.component';
 import { BooksComponent } from './books/books.component';
 import { LoginComponent } from './security/login/login.component';
 import { RegisterComponent } from './security/register/register.component';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
+  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'book', component: BookComponent },
   { path: 'books', component: BooksComponent },
   { path: 'login', component: LoginComponent },
