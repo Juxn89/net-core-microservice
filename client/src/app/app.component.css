@@ -6,30 +6,4 @@ mat-sidenav {
   width: 250px;
 }
 
-a {
-  text-decoration: none;
-  color: white;
 
-  &:hover, &:active {
-    /* color: #ccc; */
-    color: #dbcde6;
-  }
-}
-
-.nav-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex: 1;
-}
-
-.navegation-menu {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.navegation-list {
-  display: inline-block;
-  padding-left: 6px;
-}

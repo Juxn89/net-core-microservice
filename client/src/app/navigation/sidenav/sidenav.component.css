@@ -1,0 +1,16 @@
+a {
+  text-decoration: none;
+  color: white;
+
+  &:hover, &:active {
+    /* color: #ccc; */
+    color: #dbcde6;
+    cursor: pointer;
+  }
+}
+
+.navegation-menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
