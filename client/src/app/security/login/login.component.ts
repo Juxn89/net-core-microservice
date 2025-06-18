@@ -18,9 +18,6 @@ import { SecurityService } from '../security.service';
     FlexLayoutModule,
     FormsModule
   ],
-  providers: [
-    SecurityService
-  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -34,7 +31,7 @@ export class LoginComponent {
         email: form.value.email,
         password: form.value.password
       };
-      
+
       this.securityService.login(loginData);
     }
   }

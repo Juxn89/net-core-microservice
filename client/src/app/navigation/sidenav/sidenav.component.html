@@ -12,10 +12,17 @@
 
       <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
         <ul fxLayout="row" fxLayoutGap="10px" class="navegation-menu">
-          <li><a routerLink="/register">Register</a></li>
-          <li><a routerLink="/login">Login</a></li>
-          <li><a routerLink="/">Home</a></li>
+          @if (!isUserLogged) {
+            <li><a routerLink="/register">Register</a></li>
+            <li><a routerLink="/login">Login</a></li>
+          }
+          @else {
+            <li><a routerLink="/">Home</a></li>
+          }
+
         </ul>
       </div>
 
     </mat-toolbar>
+
+    <span>isUserLogged: {{ isUserLogged }}</span>

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { SecurityService } from '../security.service';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 export class RegisterComponent {
   value = 'Clear me';
 
+  constructor(
+    private securityService: SecurityService
+  ) {}
+
   registerUser(form: NgForm) {
-    console.log(form);
+    this.securityService.register({
+      email: form.value.email,
+      password: form.value.password,
+      name: form.value.name,
+      lastNames: form.value.lastNames,
+      userId: '',
+      userName: ''
+    });
   }
 }
