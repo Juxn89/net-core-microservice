@@ -47,4 +47,8 @@ export class SecurityService {
   GetUser() {
     return { ...this.user};
   }
+
+  isUserOnSession() {
+    return this.user != null
+  }
 }
