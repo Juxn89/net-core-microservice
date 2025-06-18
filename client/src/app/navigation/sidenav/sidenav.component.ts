@@ -39,4 +39,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   onMenuToggleDispatch() {
     this.sidenav.emit()
   }
+
+  singOut() {
+    this.securityService.clearSession()
+  }
 }

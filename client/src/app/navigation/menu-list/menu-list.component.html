@@ -1,14 +1,29 @@
     <mat-nav-list>
-      <a mat-list-item routerLink="/" (click)="onMenuCloseDispatch()">
-        <mat-icon>home</mat-icon>
-        <span class="navegation-list">Home</span>
-      </a>
+      @if(isLogged) {
+        <a mat-list-item routerLink="/" (click)="onMenuCloseDispatch()">
+          <mat-icon>home</mat-icon>
+          <span class="navegation-list">Home</span>
+        </a>
+      }
+
       <a mat-list-item routerLink="/register" (click)="onMenuCloseDispatch()">
         <mat-icon>how_to_reg</mat-icon>
         <span class="navegation-list">Register</span>
       </a>
-      <a mat-list-item routerLink="/login" (click)="onMenuCloseDispatch()">
-        <mat-icon>login</mat-icon>
-        <span class="navegation-list">Sing In</span>
-      </a>
+
+      @if(!isLogged){
+        <a mat-list-item routerLink="/login" (click)="onMenuCloseDispatch()">
+          <mat-icon>login</mat-icon>
+          <span class="navegation-list">Sing In</span>
+        </a>
+      }
+
+      <mat-list-item>
+        @if(isLogged) {
+          <button mat-icon-button (click)="SingOut()">
+            <mat-icon>eject</mat-icon>
+            <span class="navegation-list">Sing-out</span>
+          </button>
+        }
+      </mat-list-item>
     </mat-nav-list>

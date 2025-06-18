@@ -1,8 +1,9 @@
-import { Subject, Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router'
+import { Subject } from 'rxjs';
 
 import { User } from "./user.model";
 import { LoginData } from "./login-data.model";
-import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class SecurityService {
@@ -11,6 +12,8 @@ export class SecurityService {
 
   isLogIn$ = this.isLogIn.asObservable()
 
+  constructor(private router: Router){}
+
   register(newUser: User) {
     this.user = {
       ...newUser,
@@ -18,6 +21,8 @@ export class SecurityService {
     }
 
     this.isLogIn.next(true)
+
+    this.router.navigate(['/'])
   }
 
   login(loginData: LoginData) {
@@ -29,12 +34,14 @@ export class SecurityService {
     }
 
     this.isLogIn.next(true)
+
+    this.router.navigate(['/'])
   }
 
   clearSession() {
     this.user = null!;
-
     this.isLogIn.next(false);
+    this.router.navigate(['/login'])
   }
 
   GetUser() {
