@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Books } from "./books.model";
+import { Subject } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class BooksService {
+  bookSubject = new Subject<Books>()
   private books: Books[]  = [
     {bookId: 1, title: 'The Shadow of the Wind', description: 'A gripping tale of books, mystery, and love in post-war Barcelona.', price: 19.99, publishDate: new Date('2001-06-06'), author: 'Carlos Ruiz Zafón'},
     {bookId: 2, title: 'One Hundred Years of Solitude', description: 'The Buendía family saga in the mythical town of Macondo.', price: 14.5, publishDate: new Date('1967-05-30'), author: 'Gabriel García Márquez'},
@@ -23,5 +25,10 @@ export class BooksService {
 
   getBooks(): Books[] {
     return [ ...this.books ]
+  }
+
+  saveBook(newBook: Books){
+    this.books.push(newBook)
+    this.bookSubject.next(newBook)
   }
 }

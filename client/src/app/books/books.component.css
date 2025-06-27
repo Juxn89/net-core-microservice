@@ -2,3 +2,10 @@ section {
   margin: 5px;
   padding: 5px;
 }
+
+#btnAdd {
+  right: 45px;
+  bottom: 45px;
+  left: auto;
+  position: absolute;
+}

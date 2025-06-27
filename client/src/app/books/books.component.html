@@ -30,6 +30,9 @@
   </table>
 
   <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
-
   </mat-paginator>
 </section>
+
+<button mat-fab id="btnAdd" color="warn" (click)="addBookDialog()">
+  <mat-icon fontIcon="add"></mat-icon>
+</button>
