@@ -47,9 +47,9 @@
 
           <mat-form-field appearance="outline">
             <mat-select [(ngModel)]="selectedAuthor" name="author" (selectionChange)="selectAuthor($event)">
-              <mat-option value="1">Stephen King</mat-option>
-              <mat-option value="2">Richard Bachman</mat-option>
-              <mat-option value="3">Werner Heisenberg</mat-option>
+              @for (author of authors; track $index) {
+                <mat-option value="auhotr.authorId">{{ `${ author.name } ${ author.lastName }` }}</mat-option>
+              }
             </mat-select>
           </mat-form-field>
 

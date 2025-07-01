@@ -1,31 +1,33 @@
-import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild, viewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { BooksService } from './books.service';
-import { Books } from './books.model';
-import { CurrencyPipe } from '@angular/common';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { FlexModule } from '@angular/flex-layout';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialog } from '@angular/material/dialog'
-import { BookDialog } from './book.dialog.component';
 import { Subscription } from 'rxjs';
+import { CurrencyPipe } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
+import { MatDialog } from '@angular/material/dialog'
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild, viewChild } from '@angular/core';
+
+import { Books } from './books.model';
+import { BooksService } from './books.service';
+import { Pagination } from './pagination.model';
+import { BookDialog } from './book.dialog.component';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator'
 
 @Component({
   selector: 'app-books',
   imports: [
-    MatTableModule,
-    MatSortModule,
     CurrencyPipe,
     FlexModule,
+    MatButtonModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatPaginatorModule,
-    MatButtonModule,
-    MatIconModule
+    MatSortModule,
+    MatTableModule
   ],
   templateUrl: './books.component.html',
   styleUrl: './books.component.css',
@@ -41,12 +43,20 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private booksSubcription!: Subscription
 
+  totalBooks = 0
+  booksPerPage = 5
+  booksPerPageOptions = [1, 2, 5, 10]
+  currentPage = 1
+  sortField = 'title'
+  sortDirection = 1
+  filterValue = null
+
   constructor(
     private bookService: BooksService
   ){}
 
   ngOnDestroy(): void {
-    this.booksSubcription.unsubscribe()
+    // this.booksSubcription.unsubscribe()
   }
 
   ngAfterViewInit(): void {
@@ -55,16 +65,38 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.books = this.bookService.getBooks()
-    this.booksDataSource.data = this.bookService.getBooks()
-    this.booksSubcription = this.bookService.bookSubject.subscribe( () => {
-      this.booksDataSource.data = this.bookService.getBooks()
-    })
+    this.bookService.getBooks(
+      this.booksPerPage,
+      this.currentPage,
+      this.sortField,
+      this.sortDirection,
+      this.filterValue)
+
+    this.bookService
+      .getCurrentListener()
+      .subscribe((books: Pagination<Books>) => {
+        this.booksDataSource = new MatTableDataSource()
+        this.booksDataSource.data = books.data
+        
+        this.totalBooks = books.totalRecords
+      })
   }
 
   filter(event: KeyboardEvent) {
     const currentValue = event.key
     this.booksDataSource.filter = currentValue
+  }
+
+  paginatorEvent(event: PageEvent) {
+    this.booksPerPage = event.pageSize
+    this.currentPage = event.pageIndex + 1
+
+    this.bookService.getBooks(
+      this.booksPerPage,
+      this.currentPage,
+      this.sortField,
+      this.sortDirection,
+      this.filterValue)
   }
 
   addBookDialog() {

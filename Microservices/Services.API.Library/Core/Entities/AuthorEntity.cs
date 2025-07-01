@@ -11,7 +11,7 @@ namespace Services.API.Library.Core.Entities
     [BsonElement("lastName")]
     public string LastName { get; set; }
 
-    [BsonElement("degree")]
+    [BsonElement("academicDegree")]
     public string Degree { get; set; }
   }
 }

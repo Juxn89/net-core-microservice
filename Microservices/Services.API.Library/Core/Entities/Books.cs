@@ -13,12 +13,16 @@ namespace Services.API.Library.Core.Entities
     public string Description { get; set; }
 
     [BsonElement("price")]
-    public int Price { get; set; }
+    public double Price { get; set; }
 
     [BsonElement("publishDate")]
     public DateTime? PublishDate { get; set; }
 
     [BsonElement("author")]
-    public AuthorEntity Author { get; set; }
+    [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+    public string Author { get; set; }
+
+    [BsonIgnore]
+    public AuthorEntity AuthorName { get; set; }
   }
 }
