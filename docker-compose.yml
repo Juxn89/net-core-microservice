@@ -12,7 +12,21 @@ services:
     volumes:
       - mongodb_data:/data/db      
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+  
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: sqlserver
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong!Passw0rd"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
 
 volumes:
   mongodb_data:
+    driver: local
+  sqlserver_data:
     driver: local
