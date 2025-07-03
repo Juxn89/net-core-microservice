@@ -39,7 +39,7 @@
             <input
               type="number"
               matInput placeholder="e.g. 19.99"
-              name="description"
+              name="price"
               ngModel
               required/>
             <mat-error>This field is mandatory</mat-error>
@@ -48,7 +48,7 @@
           <mat-form-field appearance="outline">
             <mat-select [(ngModel)]="selectedAuthor" name="author" (selectionChange)="selectAuthor($event)">
               @for (author of authors; track $index) {
-                <mat-option value="auhotr.authorId">{{ `${ author.name } ${ author.lastName }` }}</mat-option>
+                <mat-option [value]="author.id">{{ `${ author.name } ${ author.lastName }` }}</mat-option>
               }
             </mat-select>
           </mat-form-field>

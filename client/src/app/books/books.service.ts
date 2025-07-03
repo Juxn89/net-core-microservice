@@ -12,7 +12,7 @@ export class BooksService {
   baseUrl: string = environment.baseUrl
   private books: Books[]  = []
   private httpClient = inject(HttpClient)
-  bookSubject = new Subject<Books>()
+  bookSubject = new Subject()
   bookPagination!: Pagination<Books>
   bookPaginationSubject = new Subject<Pagination<Books>>()
 
@@ -37,7 +37,13 @@ export class BooksService {
   }
 
   saveBook(newBook: Books){
-    this.books.push(newBook)
-    this.bookSubject.next(newBook)
+    this.httpClient.post(`${this.baseUrl}api/Books`, newBook)
+      .subscribe(book => {
+        this.bookSubject.next(book)
+      })
+  }
+
+  getCurrentBookListener(){
+    return this.bookSubject.asObservable()
   }
 }

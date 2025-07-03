@@ -10,9 +10,10 @@ import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild, viewChi
 
 import { Books } from './books.model';
 import { BooksService } from './books.service';
+import { SortDirecction } from '../const/enums'
 import { Pagination } from './pagination.model';
 import { BookDialog } from './book.dialog.component';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator'
 
@@ -48,7 +49,7 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
   booksPerPageOptions = [1, 2, 5, 10]
   currentPage = 1
   sortField = 'title'
-  sortDirection = 1
+  sortDirection = SortDirecction.ASC
   filterValue = null
 
   constructor(
@@ -65,19 +66,14 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.bookService.getBooks(
-      this.booksPerPage,
-      this.currentPage,
-      this.sortField,
-      this.sortDirection,
-      this.filterValue)
+    this.loadBooksData()
 
     this.bookService
       .getCurrentListener()
       .subscribe((books: Pagination<Books>) => {
         this.booksDataSource = new MatTableDataSource()
         this.booksDataSource.data = books.data
-        
+
         this.totalBooks = books.totalRecords
       })
   }
@@ -101,5 +97,25 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addBookDialog() {
     const dialogRef = this.dialog.open(BookDialog, { width: '350px' })
+
+    dialogRef.afterClosed()
+      .subscribe(() => {
+        this.loadBooksData()
+      })
+  }
+
+  private loadBooksData() {
+    this.bookService.getBooks(
+      this.booksPerPage,
+      this.currentPage,
+      this.sortField,
+      this.sortDirection,
+      this.filterValue)
+  }
+
+  sortColumn(event: Sort) {
+    this.sortField = event.active
+    this.sortDirection = event.direction === 'asc' ? SortDirecction.ASC : SortDirecction.DESC
+    this.loadBooksData()
   }
 }

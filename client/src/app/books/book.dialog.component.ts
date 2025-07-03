@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { Form, FormsModule, NgForm } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -11,6 +11,7 @@ import { MatOption, MatSelectChange, MatSelectModule } from '@angular/material/s
 import { BooksService } from "./books.service";
 import { AuthorService } from "../authors/author.service";
 import { Author } from "../authors/author.model";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-book-dialog',
@@ -31,7 +32,7 @@ import { Author } from "../authors/author.model";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BookDialog implements OnInit {
+export class BookDialog implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialog,
     private booksService: BooksService,
@@ -39,16 +40,26 @@ export class BookDialog implements OnInit {
   ){}
 
   selectedAuthor: string = ''
+  selectedAuthorId: string = ''
   selectedAuthorName: string = ''
   publishDate: string = ''
   authors: Author[] = []
 
+  authorSubcription!: Subscription
+
   ngOnInit(): void {
-    // this.authors = this.authorService.getAuthors()
+    this.authorService.getAuthors()
+    this.authorSubcription = this.authorService.getCurrentListener()
+      .subscribe(authors => {
+        this.authors = authors
+      })
+  }
+
+  ngOnDestroy(): void {
+    this.authorSubcription.unsubscribe()
   }
 
   SaveBook(dialogForm: NgForm) {
-
     if(!dialogForm.valid)
       return
 
@@ -59,7 +70,7 @@ export class BookDialog implements OnInit {
       title,
       description,
       price,
-      author: this.selectedAuthorName,
+      author: this.selectedAuthorId,
       publishDate: new Date(this.publishDate)
     })
 
@@ -67,6 +78,7 @@ export class BookDialog implements OnInit {
   }
 
   selectAuthor(event: MatSelectChange<any>){
+    this.selectedAuthorId = (event.source.selected as MatOption).value
     this.selectedAuthorName = (event.source.selected as MatOption).viewValue
   }
 }

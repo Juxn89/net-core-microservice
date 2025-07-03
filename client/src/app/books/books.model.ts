@@ -4,5 +4,6 @@ export interface Books {
   description: string,
   price: number,
   publishDate?: Date
-  author: string
+  author: string,
+  authorName?: any
 }
