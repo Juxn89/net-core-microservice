@@ -18,7 +18,7 @@ services:
     container_name: sqlserver
     restart: always
     ports:
-      - "1433:1433"
+      - "14330:1433"
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "YourStrong!Passw0rd"
