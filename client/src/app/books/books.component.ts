@@ -10,12 +10,13 @@ import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild, viewChi
 
 import { Books } from './books.model';
 import { BooksService } from './books.service';
-import { SortDirecction } from '../const/enums'
+import { KeyboardKey, SortDirecction } from '../const/enums'
 import { Pagination } from './pagination.model';
 import { BookDialog } from './book.dialog.component';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator'
+import { debounce } from './js.helpers';
 
 @Component({
   selector: 'app-books',
@@ -50,7 +51,7 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
   currentPage = 1
   sortField = 'title'
   sortDirection = SortDirecction.ASC
-  filterValue = null
+  filterValue: any = null
 
   constructor(
     private bookService: BooksService
@@ -79,8 +80,16 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   filter(event: KeyboardEvent) {
-    const currentValue = event.key
-    this.booksDataSource.filter = currentValue
+    debounce( () => {
+      const currentValue = event.key
+      const requestBody = {
+        key: 'title',
+        value: currentValue
+      }
+
+      this.filterValue = { ...requestBody }
+      this.loadBooksData()
+    })
   }
 
   paginatorEvent(event: PageEvent) {
