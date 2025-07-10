@@ -1,15 +1,20 @@
-using Microsoft.AspNetCore.Authentication;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Services.API.Security.Core.Application;
 using Services.API.Security.Core.Entities;
+using Services.API.Security.Core.JWT;
+using Services.API.Security.Core.Maps;
 using Services.API.Security.Core.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services
+  .AddControllers()
+  .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Register>());
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,6 +29,12 @@ builder.Services
   .AddSignInManager<SignInManager<User>>();
 
 builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+builder.Services.AddAutoMapper(config => config.AddProfile<MappingProfile>());
+
+builder.Services.AddScoped<IJwtGenerator, JWTGenerator>();
+builder.Services.AddScoped<IUserSession, UserSession>();
 
 var app = builder.Build();
 
