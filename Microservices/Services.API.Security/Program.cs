@@ -1,11 +1,14 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Services.API.Security.Core.Application;
 using Services.API.Security.Core.Entities;
 using Services.API.Security.Core.JWT;
 using Services.API.Security.Core.Maps;
 using Services.API.Security.Core.Persistence;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +39,18 @@ builder.Services.AddAutoMapper(config => config.AddProfile<MappingProfile>());
 builder.Services.AddScoped<IJwtGenerator, JWTGenerator>();
 builder.Services.AddScoped<IUserSession, UserSession>();
 
+var jwtKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+  .AddJwtBearer(options => {
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+      ValidateIssuerSigningKey = true,
+      IssuerSigningKey = jwtKey,
+      ValidateAudience = false,
+      ValidateIssuer = false,
+    };
+  });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,6 +61,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 

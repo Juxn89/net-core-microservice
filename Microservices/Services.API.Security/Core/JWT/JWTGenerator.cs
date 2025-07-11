@@ -20,6 +20,7 @@ namespace Services.API.Security.Core.JWT
       {
         new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim("username", user.UserName),
         new Claim("name", user.Name),
         new Claim("lastName", user.LastName)
       };

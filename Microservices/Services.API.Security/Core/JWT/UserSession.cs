@@ -14,8 +14,7 @@
       var user = _httpContextAccessor.HttpContext?.User?.Claims?
         .FirstOrDefault(x => x.Type == "username")?.Value;
 
-
-      throw new NotImplementedException();
+      return user ?? string.Empty;
     }
   }
 }

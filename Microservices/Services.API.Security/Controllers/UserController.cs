@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.API.Security.Core.Application;
 using Services.API.Security.Core.Record;
@@ -36,6 +38,7 @@ namespace Services.API.Security.Controllers
       return Ok(user);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Get()
     {
       var user = await _mediator.Send(new CurrentUser.CurrentUserCommand());
