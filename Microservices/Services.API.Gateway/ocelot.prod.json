@@ -10,7 +10,10 @@
         }
       ],
       "UpstreamPathTemplate": "/authors",
-      "UpstreamHttpMethod": [ "Get" ]
-    }
+      "UpstreamHttpMethod": [ "GET", "POST", "UPDATE", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "" ]
+      }
   ]
 }

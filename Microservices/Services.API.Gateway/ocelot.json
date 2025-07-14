@@ -1,16 +1,20 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Library/authors-generic",
+      "DownstreamPathTemplate": "/api/library/authors-generic",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 53824
+          "Port": 5159
         }
       ],
-      "UpstreamPathTemplate": "/api/values",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamPathTemplate": "/authors",
+      "UpstreamHttpMethod": [ "GET", "POST", "UPDATE", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
   ]
 }
