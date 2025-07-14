@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/library/authors-generic",
+      "DownstreamPathTemplate": "/api/authors",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -10,7 +10,55 @@
         }
       ],
       "UpstreamPathTemplate": "/authors",
-      "UpstreamHttpMethod": [ "GET", "POST", "UPDATE", "DELETE" ],
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/authors/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5159
+        }
+      ],
+      "UpstreamPathTemplate": "/authors/{id}",
+      "UpstreamHttpMethod": [ "GET", "UPDATE", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/authors/pagination",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5159
+        }
+      ],
+      "UpstreamPathTemplate": "/authors/pagination",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/authors/pagination-filter",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5159
+        }
+      ],
+      "UpstreamPathTemplate": "/authors/pagination-filter",
+      "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
