@@ -1,8 +1,9 @@
-using System.Text;
-using Ocelot.Middleware;
-using Ocelot.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using Ocelot.Values;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
   });
 
+builder.Services.AddCors(options =>
+  {
+    options.AddPolicy("CorsPolicy",
+      builder =>
+      {
+        builder.AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader();
+      });
+  });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +41,8 @@ var app = builder.Build();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCors("CorsPolicy");
 
 app.UseOcelot().Wait();
 
