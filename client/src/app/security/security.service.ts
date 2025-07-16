@@ -37,15 +37,23 @@ export class SecurityService {
   }
 
   register(newUser: UserRegister) {
-    this.user = {
-      ...newUser,
-      token: '',
-      userId: Math.round(Math.random() * 10000).toString()
-    }
 
-    this.isLogIn.next(true)
+    this.httpClient.post<User>(`${this.baseURL}user/register`, newUser)
+      .subscribe(response => {
+        this.token = response.token;
 
-    this.router.navigate(['/'])
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('token', response.token);
+        }
+
+        this.user = {
+          ...response,
+          password: ''
+        }
+
+        this.isLogIn.next(true)
+        this.router.navigate(['/'])
+      })
   }
 
   login(loginData: LoginData) {
