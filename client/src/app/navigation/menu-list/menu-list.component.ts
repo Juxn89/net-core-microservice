@@ -27,6 +27,7 @@ export class MenuListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userSubscription = this.securityService.isLogIn$.subscribe(status => {
       this.isLogged = status
+      console.log(this.isLogged)
     })
   }
 

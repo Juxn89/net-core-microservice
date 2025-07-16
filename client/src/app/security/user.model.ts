@@ -5,5 +5,7 @@ export interface User {
   userName: string;
   email: string;
   password: string;
-  token?: string;
+  token: string;
 }
+
+export interface UserRegister extends Omit<User, 'token'> { }

@@ -15,7 +15,7 @@ export class AuthorService {
   private authorsSuject = new Subject<Author[]>()
 
   getAuthors() {
-    this.httpClient.get<Author[]>(`${this.baseUrl}api/Authors`)
+    this.httpClient.get<Author[]>(`${this.baseUrl}authors`)
       .pipe(
         catchError(error => {
           return of([]);

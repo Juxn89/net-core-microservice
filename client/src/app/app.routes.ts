@@ -9,9 +9,9 @@ import { SecurityRouter } from './navigation/menu-list/security.router';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [ SecurityRouter ] },
-  { path: 'authors', component: AuthorsComponent },
-  { path: 'book', component: BookComponent },
-  { path: 'books', component: BooksComponent },
+  { path: 'authors', component: AuthorsComponent, canActivate: [ SecurityRouter ] },
+  { path: 'book', component: BookComponent, canActivate: [ SecurityRouter ] },
+  { path: 'books', component: BooksComponent, canActivate: [ SecurityRouter ] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 ];

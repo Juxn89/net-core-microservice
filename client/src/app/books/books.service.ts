@@ -25,7 +25,7 @@ export class BooksService {
       filterValue
     }
 
-    this.httpClient.post<Pagination<Books>>(`${this.baseUrl}api/books/pagination`, request)
+    this.httpClient.post<Pagination<Books>>(`${this.baseUrl}books/pagination`, request)
       .subscribe(books => {
         this.bookPagination = books
         this.bookPaginationSubject.next({...books})
@@ -37,7 +37,7 @@ export class BooksService {
   }
 
   saveBook(newBook: Books){
-    this.httpClient.post(`${this.baseUrl}api/Books`, newBook)
+    this.httpClient.post(`${this.baseUrl}books`, newBook)
       .subscribe(book => {
         this.bookSubject.next(book)
       })

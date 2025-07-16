@@ -1,30 +1,45 @@
-import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router'
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router'
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
-import { User } from "./user.model";
 import { LoginData } from "./login-data.model";
-import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { User, UserRegister } from "./user.model";
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class SecurityService {
   baseURL = environment.baseUrl;
   private httpClient = inject(HttpClient)
+  private platformId = inject(PLATFORM_ID);
 
   private user!: User;
-  private token: string | undefined;
+  private token!: string;
   private isLogIn = new Subject<boolean>();
 
   isLogIn$ = this.isLogIn.asObservable()
 
   constructor(
     private router: Router
-  ){}
+  ){
+    this.initializeFromStorage();
+  }
 
-  register(newUser: User) {
+  private initializeFromStorage() {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        this.token = storedToken;
+        this.isLogIn.next(true);
+      }
+    }
+  }
+
+  register(newUser: UserRegister) {
     this.user = {
       ...newUser,
+      token: '',
       userId: Math.round(Math.random() * 10000).toString()
     }
 
@@ -38,6 +53,10 @@ export class SecurityService {
       .subscribe(response => {
         this.token = response.token;
 
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('token', response.token);
+        }
+
         this.user = {
           ...response,
           password: ''
@@ -50,6 +69,12 @@ export class SecurityService {
 
   clearSession() {
     this.user = null!;
+    this.token = '';
+
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+    }
+
     this.isLogIn.next(false);
     this.router.navigate(['/login'])
   }
@@ -63,6 +88,12 @@ export class SecurityService {
   }
 
   getToken(): string {
-    return this.token!
+    if (!this.token && isPlatformBrowser(this.platformId)) {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        this.token = storedToken;
+      }
+    }
+    return this.token || '';
   }
 }

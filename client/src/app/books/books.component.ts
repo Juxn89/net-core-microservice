@@ -58,7 +58,7 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
   ){}
 
   ngOnDestroy(): void {
-    // this.booksSubcription.unsubscribe()
+    this.booksSubcription.unsubscribe()
   }
 
   ngAfterViewInit(): void {
@@ -69,7 +69,7 @@ export class BooksComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.loadBooksData()
 
-    this.bookService
+    this.booksSubcription = this.bookService
       .getCurrentListener()
       .subscribe((books: Pagination<Books>) => {
         this.booksDataSource = new MatTableDataSource()
