@@ -13,6 +13,7 @@ export class SecurityService {
   private httpClient = inject(HttpClient)
 
   private user!: User;
+  private token: string | undefined;
   private isLogIn = new Subject<boolean>();
 
   isLogIn$ = this.isLogIn.asObservable()
@@ -33,21 +34,18 @@ export class SecurityService {
   }
 
   login(loginData: LoginData) {
-    this.httpClient.post(`${this.baseURL}user/login`, loginData)
+    this.httpClient.post<User>(`${this.baseURL}user/login`, loginData)
       .subscribe(response => {
-        console.log(response)
+        this.token = response.token;
+
+        this.user = {
+          ...response,
+          password: ''
+        }
+
+        this.isLogIn.next(true)
+        this.router.navigate(['/'])
       })
-
-    this.user = {
-      ...this.user,
-      email: loginData.email,
-      password: loginData.password,
-      userId: Math.round(Math.random() * 10000).toString()
-    }
-
-    this.isLogIn.next(true)
-
-    // this.router.navigate(['/'])
   }
 
   clearSession() {
@@ -62,5 +60,9 @@ export class SecurityService {
 
   isUserOnSession() {
     return this.user != null
+  }
+
+  getToken(): string {
+    return this.token!
   }
 }
