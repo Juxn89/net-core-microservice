@@ -25,8 +25,6 @@ It demonstrates a modern microservices architecture with:
 
 ![Microservices Architecture](https://miro.medium.com/v2/resize:fit:1100/format:webp/1*p86HNk_uPGe2lz11NTDKmg.png)
 
-> _Replace the above URL with your actual architecture image if available. Otherwise, use a placeholder or upload your own diagram._
-
 ---
 
 ## 🛠️ Technologies Used
@@ -109,16 +107,6 @@ Visit [http://localhost:4200](http://localhost:4200) in your browser.
 Key dependencies from `package.json`:
 
 - `@angular/core`, `@angular/material`, `@angular/flex-layout`, `rxjs`, `express`, etc.
-
----
-
-## 📸 Screenshots
-
-![App Screenshot](https://raw.githubusercontent.com/your-repo/your-project/main/docs/screenshot.png)
-
-> _Replace with your actual screenshots or remove if not available._
-
----
 
 ## 📖 Further Resources
 
